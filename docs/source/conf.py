@@ -15,8 +15,8 @@ sys.path.insert(0, os.path.abspath("../../src"))
 project = "CLFits"
 copyright = "2024, Amber Malpas"
 author = "Amber Malpas"
-release = "0.1.0"
-version = "0.1.0"
+release = "0.1.3"
+version = "0.1.3"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
