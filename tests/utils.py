@@ -7,8 +7,7 @@ from astropy.io import fits
 
 
 def create_test_fits(tmp_path: Path) -> Path:
-    """
-    Create a simple FITS file for testing.
+    """Create a simple FITS file for testing.
 
     The FITS file will have a 1x1 pixel image and a minimal header.
 
@@ -21,6 +20,7 @@ def create_test_fits(tmp_path: Path) -> Path:
     -------
     Path
         The path to the created FITS file.
+
     """
     fits_file = tmp_path / "test.fits"
     image_data = np.ones((1, 1), dtype=np.int16)
@@ -32,4 +32,4 @@ def create_test_fits(tmp_path: Path) -> Path:
     hdu.header["EXPTIME"] = (300.0, "Total exposure time (s)")
 
     hdu.writeto(fits_file, overwrite=True)
-    return fits_file 
+    return fits_file

@@ -69,9 +69,7 @@ def set(
         header = read_header(fits_file)
         header[keyword] = (value, comment) if comment else value
         write_header(fits_file, header)
-        console.print(
-            f"[bold green]Success: Set '{keyword}' to '{value}' in '{fits_file}'.[/bold green]"
-        )
+        console.print(f"[bold green]Success: Set '{keyword}' to '{value}' in '{fits_file}'.[/bold green]")
     except (FileNotFoundError, OSError) as e:
         console.print(f"[bold red]{e}[/bold red]")
         raise typer.Exit(code=1)
@@ -107,9 +105,9 @@ def main(
         help="Show the version and exit.",
     ),
 ):
-    """A command-line FITS header editor."""
+    """Manage FITS headers from the command line."""
     pass
 
 
 if __name__ == "__main__":
-    sys.exit(app()) 
+    sys.exit(app())

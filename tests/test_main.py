@@ -70,4 +70,4 @@ def test_file_not_found_errors() -> None:
 
         result = runner.invoke(app, args)
         assert result.exit_code == 2  # typer exits with 2 for bad arguments like nonexistent paths
-        assert "does not exist" in result.stdout 
+        assert "does not exist" in result.stdout

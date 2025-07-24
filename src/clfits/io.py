@@ -1,15 +1,13 @@
 """Functions for handling FITS file I/O operations."""
 
 from pathlib import Path
-from typing import Any, Optional
 
 from astropy.io import fits
 from astropy.io.fits.header import Header
 
 
 def read_header(fits_file: Path) -> Header:
-    """
-    Read the primary header from a FITS file.
+    """Read the primary header from a FITS file.
 
     Parameters
     ----------
@@ -27,6 +25,7 @@ def read_header(fits_file: Path) -> Header:
         If the FITS file does not exist.
     OSError
         If the file is not a valid FITS file.
+
     """
     if not fits_file.exists():
         raise FileNotFoundError(f"Error: FITS file not found at '{fits_file}'")
@@ -39,8 +38,7 @@ def read_header(fits_file: Path) -> Header:
 
 
 def write_header(fits_file: Path, header: Header) -> None:
-    """
-    Write a header to the primary HDU of a FITS file.
+    """Write a header to the primary HDU of a FITS file.
 
     This function opens the FITS file in update mode and replaces the
     primary header with the new one.
@@ -58,6 +56,7 @@ def write_header(fits_file: Path, header: Header) -> None:
         If the FITS file does not exist.
     OSError
         If the file is not a valid FITS file or cannot be written to.
+
     """
     if not fits_file.exists():
         raise FileNotFoundError(f"Error: FITS file not found at '{fits_file}'")
@@ -67,4 +66,4 @@ def write_header(fits_file: Path, header: Header) -> None:
             hdul[0].header = header
             hdul.flush()
     except OSError as e:
-        raise OSError(f"Error: Failed to write to FITS file at '{fits_file}'.") from e 
+        raise OSError(f"Error: Failed to write to FITS file at '{fits_file}'.") from e
