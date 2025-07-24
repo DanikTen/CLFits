@@ -24,4 +24,4 @@ docs:
 	sphinx-build -b html docs/source docs/build/html
 
 release-patch:
-	bump-my-version bump patch --config-file pyproject.toml 
+	bump-my-version bump patch 
