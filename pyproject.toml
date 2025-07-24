@@ -47,6 +47,13 @@ dev = [
     "sphinx",
     "furo",
     "pre-commit",
+    "numpydoc",
+]
+
+docs = [
+    "sphinx",
+    "furo",
+    "numpydoc",
 ]
 
 [tool.setuptools]
