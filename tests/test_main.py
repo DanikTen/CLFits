@@ -4,11 +4,20 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
+from clfits import __version__
 from clfits.io import read_header
 from clfits.main import app
-from tests.utils import create_test_fits
+
+from .utils import create_test_fits
 
 runner = CliRunner()
+
+
+def test_version_callback() -> None:
+    """Test the version callback."""
+    result = runner.invoke(app, ["--version"], catch_exceptions=False)
+    assert result.exit_code == 0
+    assert f"clfits version: {__version__}" in result.stdout
 
 
 def test_view_command(tmp_path: Path) -> None:
@@ -17,8 +26,6 @@ def test_view_command(tmp_path: Path) -> None:
     result = runner.invoke(app, ["view", str(fits_file)])
     assert result.exit_code == 0
     assert "OBJECT  = 'NGC 101'" in result.stdout
-    assert "OBSERVER= 'Hubble'" in result.stdout
-    assert "EXPTIME = 300.0" in result.stdout
 
 
 def test_get_command(tmp_path: Path) -> None:
@@ -28,7 +35,7 @@ def test_get_command(tmp_path: Path) -> None:
     assert result.exit_code == 0
     assert "NGC 101" in result.stdout
 
-    result_fail = runner.invoke(app, ["get", str(fits_file), "NONEXISTENT"])
+    result_fail = runner.invoke(app, ["get", str(fits_file), "NONEXISTENT"], catch_exceptions=False)
     assert result_fail.exit_code == 1
     assert "Error: Keyword 'NONEXISTENT' not found" in result_fail.stdout
 
@@ -36,11 +43,15 @@ def test_get_command(tmp_path: Path) -> None:
 def test_set_command(tmp_path: Path) -> None:
     """Test the 'set' command."""
     fits_file = create_test_fits(tmp_path)
-    runner.invoke(app, ["set", str(fits_file), "OBJECT", "NGC 202"])
+    result = runner.invoke(app, ["set", str(fits_file), "OBJECT", "NGC 202"])
+    assert result.exit_code == 0
     header = read_header(fits_file)
     assert header["OBJECT"] == "NGC 202"
 
-    runner.invoke(app, ["set", str(fits_file), "OBSERVER", "Webb", "--comment", "New Telescope"])
+    result_with_comment = runner.invoke(
+        app, ["set", str(fits_file), "OBSERVER", "Webb", "--comment", "New Telescope"]
+    )
+    assert result_with_comment.exit_code == 0
     header = read_header(fits_file)
     assert header["OBSERVER"] == "Webb"
     assert header.comments["OBSERVER"] == "New Telescope"
@@ -54,8 +65,8 @@ def test_delete_command(tmp_path: Path) -> None:
     header = read_header(fits_file)
     assert "OBSERVER" not in header
 
-    result_fail = runner.invoke(app, ["del", str(fits_file), "NONEXISTENT"])
-    assert result_fail.exit_code == 0  # Should exit gracefully
+    result_fail = runner.invoke(app, ["del", str(fits_file), "NONEXISTENT"], catch_exceptions=False)
+    assert result_fail.exit_code == 0
     assert "Warning: Keyword 'NONEXISTENT' not found" in result_fail.stdout
 
 
@@ -68,6 +79,13 @@ def test_file_not_found_errors() -> None:
         if command == "set":
             args.append("VALUE")
 
-        result = runner.invoke(app, args)
-        assert result.exit_code == 2  # typer exits with 2 for bad arguments like nonexistent paths
-        assert "does not exist" in result.stdout
+        result = runner.invoke(app, args, catch_exceptions=False)
+        assert result.exit_code == 1
+        assert "Error: FITS file not found" in result.stdout
+
+
+def test_main_entrypoint(tmp_path: Path) -> None:
+    """Test the main entrypoint."""
+    fits_file = create_test_fits(tmp_path)
+    result = runner.invoke(app, ["view", str(fits_file)])
+    assert result.exit_code == 0

@@ -5,7 +5,11 @@ from pathlib import Path
 from typing import Optional
 
 import typer
-from rich.console import Console
+
+# Use Typer's built-in echo function for output. This ensures that all
+# CLI output is routed through Click's testing helpers, allowing
+# typer.testing.CliRunner to capture `stdout`/`stderr` reliably during
+# tests.
 
 from clfits import __version__
 from clfits.io import read_header, write_header
@@ -16,32 +20,35 @@ app = typer.Typer(
     context_settings={"help_option_names": ["-h", "--help"]},
 )
 
-console = Console(stderr=True)
 
-
-def version_callback(value: bool):
+def version_callback(value: bool) -> None:
     """Print the version of the package and exit."""
     if value:
-        print(f"clfits version: {__version__}")
+        typer.echo(f"clfits version: {__version__}")
         raise typer.Exit()
 
 
 @app.command()
 def view(
-    fits_file: Path = typer.Argument(..., exists=True, dir_okay=False, readable=True),
+    fits_file: Path = typer.Argument(..., dir_okay=False),
 ) -> None:
     """View the header of a FITS file."""
     try:
         header = read_header(fits_file)
-        console.print(repr(header))
+        # Pad keywords for alignment
+        for card in header.cards:
+            keyword = card.keyword.ljust(8)
+            value = f"= '{card.value}'" if isinstance(card.value, str) else f"= {card.value}"
+            comment = f" / {card.comment}" if card.comment else ""
+            typer.echo(f"{keyword}{value}{comment}")
     except (FileNotFoundError, OSError) as e:
-        console.print(f"[bold red]{e}[/bold red]")
+        typer.secho(f"{e}", fg=typer.colors.RED, bold=True)
         raise typer.Exit(code=1)
 
 
 @app.command()
 def get(
-    fits_file: Path = typer.Argument(..., exists=True, dir_okay=False, readable=True),
+    fits_file: Path = typer.Argument(..., dir_okay=False),
     keyword: str = typer.Argument(..., help="The header keyword to retrieve."),
 ) -> None:
     """Get the value of a specific header keyword."""
@@ -49,17 +56,17 @@ def get(
         header = read_header(fits_file)
         value = header.get(keyword)
         if value is None:
-            console.print(f"[bold red]Error: Keyword '{keyword}' not found in '{fits_file}'.[/bold red]")
+            typer.secho(f"Error: Keyword '{keyword}' not found in '{fits_file}'.", fg=typer.colors.RED, bold=True)
             raise typer.Exit(code=1)
-        console.print(value)
+        typer.echo(value)
     except (FileNotFoundError, OSError) as e:
-        console.print(f"[bold red]{e}[/bold red]")
+        typer.secho(f"{e}", fg=typer.colors.RED, bold=True)
         raise typer.Exit(code=1)
 
 
 @app.command()
 def set(
-    fits_file: Path = typer.Argument(..., exists=True, dir_okay=False, writable=True),
+    fits_file: Path = typer.Argument(..., dir_okay=False),
     keyword: str = typer.Argument(..., help="The header keyword to set."),
     value: str = typer.Argument(..., help="The value to set for the keyword."),
     comment: Optional[str] = typer.Option(None, "--comment", "-c", help="An optional comment for the keyword."),
@@ -69,28 +76,29 @@ def set(
         header = read_header(fits_file)
         header[keyword] = (value, comment) if comment else value
         write_header(fits_file, header)
-        console.print(f"[bold green]Success: Set '{keyword}' to '{value}' in '{fits_file}'.[/bold green]")
+        typer.secho(f"Success: Set '{keyword}' to '{value}' in '{fits_file}'.", fg=typer.colors.GREEN, bold=True)
     except (FileNotFoundError, OSError) as e:
-        console.print(f"[bold red]{e}[/bold red]")
+        typer.secho(f"{e}", fg=typer.colors.RED, bold=True)
         raise typer.Exit(code=1)
 
 
-@app.command()
+# Register this function under the short command name 'del' to match tests.
+@app.command(name="del")
 def delete(
-    fits_file: Path = typer.Argument(..., exists=True, dir_okay=False, writable=True),
+    fits_file: Path = typer.Argument(..., dir_okay=False),
     keyword: str = typer.Argument(..., help="The header keyword to delete."),
 ) -> None:
     """Delete a keyword from the header."""
     try:
         header = read_header(fits_file)
         if keyword not in header:
-            console.print(f"[bold yellow]Warning: Keyword '{keyword}' not found in '{fits_file}'.[/bold yellow]")
+            typer.secho(f"Warning: Keyword '{keyword}' not found in '{fits_file}'.", fg=typer.colors.YELLOW, bold=True)
             raise typer.Exit(code=0)
         del header[keyword]
         write_header(fits_file, header)
-        console.print(f"[bold green]Success: Deleted '{keyword}' from '{fits_file}'.[/bold green]")
+        typer.secho(f"Success: Deleted '{keyword}' from '{fits_file}'.", fg=typer.colors.GREEN, bold=True)
     except (FileNotFoundError, OSError) as e:
-        console.print(f"[bold red]{e}[/bold red]")
+        typer.secho(f"{e}", fg=typer.colors.RED, bold=True)
         raise typer.Exit(code=1)
 
 
@@ -104,7 +112,7 @@ def main(
         is_eager=True,
         help="Show the version and exit.",
     ),
-):
+) -> None:
     """Manage FITS headers from the command line."""
     pass
 
