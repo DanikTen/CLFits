@@ -10,7 +10,6 @@ import typer
 # CLI output is routed through Click's testing helpers, allowing
 # typer.testing.CliRunner to capture `stdout`/`stderr` reliably during
 # tests.
-
 from clfits import __version__
 from clfits.io import read_header, write_header
 

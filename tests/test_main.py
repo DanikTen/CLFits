@@ -48,9 +48,7 @@ def test_set_command(tmp_path: Path) -> None:
     header = read_header(fits_file)
     assert header["OBJECT"] == "NGC 202"
 
-    result_with_comment = runner.invoke(
-        app, ["set", str(fits_file), "OBSERVER", "Webb", "--comment", "New Telescope"]
-    )
+    result_with_comment = runner.invoke(app, ["set", str(fits_file), "OBSERVER", "Webb", "--comment", "New Telescope"])
     assert result_with_comment.exit_code == 0
     header = read_header(fits_file)
     assert header["OBSERVER"] == "Webb"

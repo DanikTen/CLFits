@@ -37,4 +37,4 @@ def test_write_header_corrupted(tmp_path: Path):
     header = read_header(fits_file)
 
     with pytest.raises(OSError):
-        write_header(fits_file, header) 
+        write_header(fits_file, header)
