@@ -1,6 +1,6 @@
 """Functions for searching and filtering FITS headers."""
 
-from fnmatch import fnmatch
+from fnmatch import fnmatch, fnmatchcase
 
 from astropy.io.fits.header import Header
 
@@ -32,7 +32,7 @@ def search_header(
         key_matches = True
         if key_pattern:
             if case_sensitive:
-                key_matches = fnmatch(card.keyword, key_pattern)
+                key_matches = fnmatchcase(card.keyword, key_pattern)
             else:
                 key_matches = fnmatch(card.keyword.lower(), key_pattern.lower())
 
@@ -40,7 +40,7 @@ def search_header(
         if value_pattern:
             value_str = str(card.value)
             if case_sensitive:
-                value_matches = fnmatch(value_str, value_pattern)
+                value_matches = fnmatchcase(value_str, value_pattern)
             else:
                 value_matches = fnmatch(value_str.lower(), value_pattern.lower())
 
