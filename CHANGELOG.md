@@ -7,12 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - YYYY-MM-DD
+
+### Added
+
+- `search` command to filter header keywords by pattern.
+
 ## [0.2.0] - 2024-07-29
 
 ### Added
 
 - `export` command to save the FITS header to JSON, YAML, or CSV.
-- `search` command to filter header keywords by pattern.
 
 ## [0.1.4] - 2024-07-29
 
