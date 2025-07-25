@@ -1,64 +1,77 @@
-# CLFits: Command-Line FITS Header Editor
+# CLFits: FITS Header Editor
+
+A command-line tool for viewing and editing the headers of FITS files.
 
 [![PyPI Version](https://img.shields.io/pypi/v/clfits.svg)](https://pypi.org/project/clfits)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![codecov](https://codecov.io/github/AmberLee2427/CLFits/graph/badge.svg?token=C9FTGOCJ4M)](https://codecov.io/github/AmberLee2427/CLFits)
 [![CI Status](https://github.com/AmberLee2427/CLFits/actions/workflows/ci.yml/badge.svg)](https://github.com/AmberLee2427/CLFits/actions/workflows/ci.yml)
+[![Test Coverage](https://codecov.io/gh/AmberLee2427/CLFits/branch/main/graph/badge.svg)](https://codecov.io/gh/AmberLee2427/CLFits)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-A simple, robust command-line tool for viewing and editing FITS file headers.
-
-## 🚀 Installation
-
-Install `CLFits` directly from PyPI:
+## Installation
 
 ```bash
 pip install clfits
 ```
 
-## ✨ Quick Start
+## Quick Start
 
-`CLFits` provides a straightforward, command-based interface for header manipulation.
+### View a Header
 
-**View the entire header:**
-
+To view the primary header of a FITS file:
 ```bash
 clfits view my_image.fits
 ```
 
-**Get the value of a specific keyword:**
+To view the header of a specific extension (e.g., the second HDU, index 1):
+```bash
+clfits view my_image.fits --hdu 1
+```
+
+Or view an extension by name:
+```bash
+clfits view my_image.fits --hdu "OBSERVATIONS"
+```
+
+### Get, Set, and Delete Keywords
 
 ```bash
+# Get the value of a keyword
 clfits get my_image.fits OBJECT
+
+# Set a new value for a keyword
+clfits set my_image.fits OBJECT "NGC 42"
+
+# Set a keyword with a comment
+clfits set my_image.fits OBSERVER "Webb" --comment "James Webb Space Telescope"
+
+# Delete a keyword from the first extension's header
+clfits del my_image.fits --hdu 1 TFORM1
 ```
 
-**Set a keyword's value and comment:**
+### Search and Filter Keywords
 
+Find all keywords starting with "NAXIS":
 ```bash
-clfits set my_image.fits OBJECT "NGC 4993" --comment "Corrected object name"
+clfits search my_image.fits --key "NAXIS*"
 ```
 
-**Delete a keyword:**
-
+Find all keywords in the "EVENTS" extension where the value is a specific string:
 ```bash
-clfits del my_image.fits HISTORY
+clfits search my_image.fits --hdu "EVENTS" --value "GTI"
 ```
 
-**Export the header to JSON:**
+### Export Headers
 
+Export the primary header to a JSON file:
 ```bash
-clfits export my_image.fits --format json
+clfits export my_image.fits --output header.json
 ```
 
-**Export the header to a YAML file (format is inferred from filename):**
-
+Export the header of the second HDU to YAML, printing to the console:
 ```bash
-clfits export my_image.fits --output header.yml
+clfits export my_image.fits --hdu 1 --format yaml
 ```
 
-**Search for all keywords related to the observation date:**
+## Documentation
 
-```bash
-clfits search my_image.fits --key "DATE*"
-```
-
-For more detailed instructions, see the [full documentation](https://clfits.readthedocs.io/). 
+Full documentation is available at [clfits.readthedocs.io](https://clfits.readthedocs.io). 
