@@ -10,7 +10,6 @@ This file lists ideas and enhancements that are out of scope for the initial v1 
 - **Interactive Mode:**
   - Launch an interactive shell for advanced header/data editing.
 - **Advanced CLI Features:**
-  - Search/filter header keywords by pattern or value.
   - Undo/redo for header edits.
 - **GUI Application:**
   - Develop a cross-platform desktop GUI for FITS editing.

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "clfits"
-version = "0.3.0"
+version = "0.4.0"
 authors = [{ name = "Amber Malpas", email = "malpas.1@osu.edu" }]
 description = "A command-line FITS header editor."
 readme = "README.md"
