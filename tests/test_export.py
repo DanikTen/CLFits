@@ -61,7 +61,7 @@ def test_export_to_stdout(tmp_path: Path):
     fits_file = create_test_fits(tmp_path)
     result = runner.invoke(app, ["export", str(fits_file), "--format", "json"])
     assert result.exit_code == 0
-    data = json.loads(result.stdout)
+    data = json.loads(result.output)
     assert data["OBJECT"] == "NGC 101"
 
 
@@ -71,7 +71,7 @@ def test_export_to_file(tmp_path: Path):
     output_file = tmp_path / "header.yaml"
     result = runner.invoke(app, ["export", str(fits_file), "--output", str(output_file)])
     assert result.exit_code == 0
-    assert "Success: Header exported" in result.stdout
+    assert "Success: Header exported" in result.output
     with open(output_file) as f:
         data = yaml.safe_load(f)
     assert data["OBJECT"] == "NGC 101"
@@ -93,7 +93,7 @@ def test_export_format_required_error():
     """Test that --format is required for stdout."""
     result = runner.invoke(app, ["export", "dummy.fits"], catch_exceptions=False)
     assert result.exit_code == 1
-    assert "Error: --format is required" in result.stdout
+    assert "Error: --format is required" in result.output
 
 
 def test_export_infer_format_error(tmp_path: Path):
@@ -102,4 +102,4 @@ def test_export_infer_format_error(tmp_path: Path):
     output_file = tmp_path / "header.txt"
     result = runner.invoke(app, ["export", str(fits_file), "--output", str(output_file)])
     assert result.exit_code == 1
-    assert "Error: Could not infer format" in result.stdout
+    assert "Error: Could not infer format" in result.output

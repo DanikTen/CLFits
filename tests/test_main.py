@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-import pytest
 from typer.testing import CliRunner
 
 from clfits import __version__
@@ -18,7 +17,7 @@ def test_version_callback() -> None:
     """Test the version callback."""
     result = runner.invoke(app, ["--version"], catch_exceptions=False)
     assert result.exit_code == 0
-    assert f"clfits version: {__version__}" in result.stdout
+    assert f"clfits version: {__version__}" in result.output
 
 
 def test_view_command(tmp_path: Path) -> None:
@@ -26,7 +25,7 @@ def test_view_command(tmp_path: Path) -> None:
     fits_file = create_test_fits(tmp_path)
     result = runner.invoke(app, ["view", str(fits_file)])
     assert result.exit_code == 0
-    assert "OBJECT  = 'NGC 101'" in result.stdout
+    assert "OBJECT  = 'NGC 101'" in result.output
 
 
 def test_get_command(tmp_path: Path) -> None:
@@ -34,11 +33,11 @@ def test_get_command(tmp_path: Path) -> None:
     fits_file = create_test_fits(tmp_path)
     result = runner.invoke(app, ["get", str(fits_file), "OBJECT"])
     assert result.exit_code == 0
-    assert "NGC 101" in result.stdout
+    assert "NGC 101" in result.output
 
     result_fail = runner.invoke(app, ["get", str(fits_file), "NONEXISTENT"], catch_exceptions=False)
     assert result_fail.exit_code == 1
-    assert "Error: Keyword 'NONEXISTENT' not found" in result_fail.stdout
+    assert "Error: Keyword 'NONEXISTENT' not found" in result_fail.output
 
 
 def test_set_command(tmp_path: Path) -> None:
@@ -46,11 +45,13 @@ def test_set_command(tmp_path: Path) -> None:
     fits_file = create_test_fits(tmp_path)
     result = runner.invoke(app, ["set", str(fits_file), "OBJECT", "NGC 202"])
     assert result.exit_code == 0
+    assert "Success: Set 'OBJECT' to 'NGC 202'" in result.output
     header = read_header(fits_file)
     assert header["OBJECT"] == "NGC 202"
 
     result_with_comment = runner.invoke(app, ["set", str(fits_file), "OBSERVER", "Webb", "--comment", "New Telescope"])
     assert result_with_comment.exit_code == 0
+    assert "Success: Set 'OBSERVER' to 'Webb'" in result_with_comment.output
     header = read_header(fits_file)
     assert header["OBSERVER"] == "Webb"
     assert header.comments["OBSERVER"] == "New Telescope"
@@ -59,14 +60,24 @@ def test_set_command(tmp_path: Path) -> None:
 def test_delete_command(tmp_path: Path) -> None:
     """Test the 'delete' command."""
     fits_file = create_test_fits(tmp_path)
-    result = runner.invoke(app, ["del", str(fits_file), "OBSERVER"])
-    assert result.exit_code == 0
-    header = read_header(fits_file)
-    assert "OBSERVER" not in header
 
+    # First, ensure the keyword we want to delete actually exists.
+    header = read_header(fits_file)
+    assert "OBJECT" in header
+
+    # Now, run the 'del' command to delete it.
+    result = runner.invoke(app, ["del", str(fits_file), "OBJECT"])
+    assert result.exit_code == 0
+    assert "Success: Deleted 'OBJECT'" in result.output
+
+    # Verify the keyword is gone.
+    header = read_header(fits_file)
+    assert "OBJECT" not in header
+
+    # Test deleting a non-existent keyword
     result_fail = runner.invoke(app, ["del", str(fits_file), "NONEXISTENT"], catch_exceptions=False)
     assert result_fail.exit_code == 0
-    assert "Warning: Keyword 'NONEXISTENT' not found" in result_fail.stdout
+    assert "Warning: Keyword 'NONEXISTENT' not found" in result_fail.output
 
 
 def test_file_not_found_errors() -> None:
@@ -80,7 +91,7 @@ def test_file_not_found_errors() -> None:
 
         result = runner.invoke(app, args)
         assert result.exit_code == 1
-        assert "Error: FITS file not found" in result.stderr
+        assert "Error: FITS file not found" in result.output
 
 
 def test_main_entrypoint(tmp_path: Path) -> None:
@@ -95,7 +106,7 @@ def test_set_keyword_in_table_hdu_by_index(tmp_path: Path):
     fits_file = create_test_fits(tmp_path, with_table=True)
     result = runner.invoke(app, ["set", str(fits_file), "NEW_KW", "new_value", "--hdu", "1"])
     assert result.exit_code == 0
-    assert "Success: Set 'NEW_KW' to 'new_value'" in result.stdout
+    assert "Success: Set 'NEW_KW' to 'new_value'" in result.output
 
     # Verify the change
     header = read_header(fits_file, hdu=1)
@@ -107,7 +118,7 @@ def test_set_keyword_in_table_hdu_by_name(tmp_path: Path):
     fits_file = create_test_fits(tmp_path, with_table=True)
     result = runner.invoke(app, ["set", str(fits_file), "NEW_KW", "new_value", "--hdu", "OBSERVATIONS"])
     assert result.exit_code == 0
-    assert "Success: Set 'NEW_KW' to 'new_value'" in result.stdout
+    assert "Success: Set 'NEW_KW' to 'new_value'" in result.output
 
     # Verify the change
     header = read_header(fits_file, hdu="OBSERVATIONS")
@@ -126,7 +137,7 @@ def test_delete_keyword_in_table_hdu(tmp_path: Path):
     # Now, run the 'del' command
     result = runner.invoke(app, ["del", str(fits_file), "DEL_KW", "--hdu", "1"])
     assert result.exit_code == 0
-    assert "Success: Deleted 'DEL_KW'" in result.stdout
+    assert "Success: Deleted 'DEL_KW'" in result.output
 
     # Verify the keyword is gone
     final_header = read_header(fits_file, hdu=1)
@@ -138,4 +149,4 @@ def test_command_fails_with_invalid_hdu(tmp_path: Path):
     fits_file = create_test_fits(tmp_path, with_table=True)
     result = runner.invoke(app, ["view", str(fits_file), "--hdu", "99"])
     assert result.exit_code == 1
-    assert "Error: HDU '99' not found" in result.stderr
+    assert "Error: HDU '99' not found" in result.output

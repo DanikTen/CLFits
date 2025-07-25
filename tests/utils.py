@@ -5,7 +5,6 @@ from pathlib import Path
 import numpy as np
 from astropy.io import fits
 from astropy.io.fits.header import Header
-from astropy.table import Table
 
 
 def create_test_fits(tmp_path: Path, with_table: bool = False) -> Path:

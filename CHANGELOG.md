@@ -7,7 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.3.0] - YYYY-MM-DD
+## [0.4.0] - YYYY-MM-DD
+
+### Added
+
+- Multi-HDU support: All commands now accept an `--hdu` option to target specific FITS extensions by index or name.
+- Comprehensive user documentation, including a new tutorial and shell completion guides.
+
+### Changed
+
+- Test coverage increased to 95% with new edge case tests.
+
+## [0.3.0] - 2024-07-30
 
 ### Added
 
