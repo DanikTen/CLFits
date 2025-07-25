@@ -7,7 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - YYYY-MM-DD
+### Added
+
+- `export` command to save the FITS header to JSON, YAML, or CSV.
+
+## [0.1.4] - 2024-07-29
+
+### Fixed
+
+- Resolved persistent test failures by refactoring CLI output to use `typer.echo`.
+- Corrected `bump-my-version` configuration to enable automated releases.
+- Fixed Read the Docs build failures by specifying documentation dependencies.
+
+## [0.1.0] - 2024-07-29
 
 ### Added
 
