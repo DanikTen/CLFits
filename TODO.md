@@ -11,7 +11,6 @@ This file lists ideas and enhancements that are out of scope for the initial v1 
   - Launch an interactive shell for advanced header/data editing.
 - **Advanced CLI Features:**
   - Search/filter header keywords by pattern or value.
-  - Export header or data to JSON, CSV, or YAML.
   - Undo/redo for header edits.
 - **GUI Application:**
   - Develop a cross-platform desktop GUI for FITS editing.

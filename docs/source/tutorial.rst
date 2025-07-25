@@ -68,4 +68,17 @@ If you don't provide an output file, the result is printed to the console.
 
 .. code-block:: bash
 
-   clfits export your_image.fits --format yaml 
+   clfits export your_image.fits --format yaml
+
+Searching for Keywords
+----------------------
+
+Sometimes you need to find specific information in a large header. The `search` command allows you to filter the header by keyword and/or value patterns.
+
+For example, to find all keywords related to the "NAXIS":
+
+.. code-block:: bash
+
+   clfits search your_image.fits --key "NAXIS*"
+
+This would return only the `NAXIS`, `NAXIS1`, and `NAXIS2` keywords, making it easy to find what you're looking for. 

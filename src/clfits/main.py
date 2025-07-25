@@ -13,6 +13,7 @@ import typer
 from clfits import __version__
 from clfits.export import Format, export_header
 from clfits.io import read_header, write_header
+from clfits.search import search_header
 
 app = typer.Typer(
     add_completion=False,
@@ -141,6 +142,35 @@ def export(
         export_header(header, format, output_file)
         if output_file:
             typer.secho(f"Success: Header exported to '{output_file}'.", fg=typer.colors.GREEN, bold=True)
+    except (FileNotFoundError, OSError) as e:
+        typer.secho(f"{e}", fg=typer.colors.RED, bold=True)
+        raise typer.Exit(code=1)
+
+
+@app.command()
+def search(
+    fits_file: Path = typer.Argument(help="The FITS file to search."),
+    key_pattern: Optional[str] = typer.Option(None, "--key", "-k", help="Glob pattern for the keyword."),
+    value_pattern: Optional[str] = typer.Option(None, "--value", "-v", help="Glob pattern for the value."),
+    case_sensitive: bool = typer.Option(False, "--case-sensitive", "-c", help="Perform a case-sensitive search."),
+) -> None:
+    """Search for keywords in a FITS header by pattern."""
+    if key_pattern is None and value_pattern is None:
+        typer.secho("Error: At least one of --key or --value must be provided.", fg=typer.colors.RED, bold=True)
+        raise typer.Exit(code=1)
+
+    try:
+        header = read_header(fits_file)
+        matches = search_header(header, key_pattern, value_pattern, case_sensitive)
+        if not matches:
+            typer.secho("No matching keywords found.", fg=typer.colors.YELLOW)
+            return
+
+        for card in matches.cards:
+            keyword = card.keyword.ljust(8)
+            value = f"= '{card.value}'" if isinstance(card.value, str) else f"= {card.value}"
+            comment = f" / {card.comment}" if card.comment else ""
+            typer.echo(f"{keyword}{value}{comment}")
     except (FileNotFoundError, OSError) as e:
         typer.secho(f"{e}", fg=typer.colors.RED, bold=True)
         raise typer.Exit(code=1)

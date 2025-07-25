@@ -55,4 +55,10 @@ clfits export my_image.fits --format json
 clfits export my_image.fits --output header.yml
 ```
 
+**Search for all keywords related to the observation date:**
+
+```bash
+clfits search my_image.fits --key "DATE*"
+```
+
 For more detailed instructions, see the [full documentation](https://clfits.readthedocs.io/). 
