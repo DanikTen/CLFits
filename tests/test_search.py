@@ -31,10 +31,10 @@ def test_search_by_value(tmp_path: Path):
 def test_search_by_key_and_value(tmp_path: Path):
     """Test searching by both keyword and value."""
     fits_file = create_test_fits(tmp_path)
-    result = runner.invoke(app, ["search", str(fits_file), "--key", "OBS*", "--value", "Hub*"])
+    result = runner.invoke(app, ["search", str(fits_file), "--key", "OBJ*", "--value", "NGC*"])
     assert result.exit_code == 0
-    assert "OBSERVER" in result.stdout
-    assert "OBJECT" not in result.stdout
+    assert "OBJECT" in result.stdout
+    assert "NGC 101" in result.stdout
 
 
 def test_search_case_sensitive(tmp_path: Path):
@@ -64,3 +64,19 @@ def test_search_no_filter_error(tmp_path: Path):
     result = runner.invoke(app, ["search", str(fits_file)], catch_exceptions=False)
     assert result.exit_code == 1
     assert "Error: At least one of --key or --value must be provided" in result.stdout
+
+
+def test_search_with_none_value(tmp_path: Path):
+    """Test searching a keyword that has a None value."""
+    fits_file = create_test_fits(tmp_path)
+
+    # Add a keyword with a None value
+    from astropy.io import fits
+
+    with fits.open(fits_file, mode="update") as hdul:
+        hdul[0].header["NONE_KW"] = None
+
+    # Search for a value; this should not find the None keyword and not crash
+    result = runner.invoke(app, ["search", str(fits_file), "--value", "some_value"])
+    assert result.exit_code == 0
+    assert "NONE_KW" not in result.stdout
