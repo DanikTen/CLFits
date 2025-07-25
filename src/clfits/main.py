@@ -11,6 +11,7 @@ import typer
 # typer.testing.CliRunner to capture `stdout`/`stderr` reliably during
 # tests.
 from clfits import __version__
+from clfits.export import Format, export_header
 from clfits.io import read_header, write_header
 
 app = typer.Typer(
@@ -96,6 +97,50 @@ def delete(
         del header[keyword]
         write_header(fits_file, header)
         typer.secho(f"Success: Deleted '{keyword}' from '{fits_file}'.", fg=typer.colors.GREEN, bold=True)
+    except (FileNotFoundError, OSError) as e:
+        typer.secho(f"{e}", fg=typer.colors.RED, bold=True)
+        raise typer.Exit(code=1)
+
+
+@app.command()
+def export(
+    fits_file: Path = typer.Argument(..., dir_okay=False, help="The input FITS file."),
+    format: Optional[Format] = typer.Option(
+        None,
+        "--format",
+        "-f",
+        case_sensitive=False,
+        help="Output format. Inferred from --output filename if not provided.",
+    ),
+    output_file: Optional[Path] = typer.Option(
+        None, "--output", "-o", help="Path to save the output file.", dir_okay=False, writable=True
+    ),
+) -> None:
+    """Export the FITS header to a specified format (JSON, YAML, or CSV)."""
+    # Determine the format
+    if format is None:
+        if output_file is None:
+            typer.secho(
+                "Error: --format is required when not writing to an output file.", fg=typer.colors.RED, bold=True
+            )
+            raise typer.Exit(code=1)
+
+        # Infer format from filename extension
+        suffix_map = {".json": Format.JSON, ".yml": Format.YAML, ".yaml": Format.YAML, ".csv": Format.CSV}
+        format = suffix_map.get(output_file.suffix.lower())
+        if format is None:
+            typer.secho(
+                f"Error: Could not infer format from '{output_file.name}'. Please use --format.",
+                fg=typer.colors.RED,
+                bold=True,
+            )
+            raise typer.Exit(code=1)
+
+    try:
+        header = read_header(fits_file)
+        export_header(header, format, output_file)
+        if output_file:
+            typer.secho(f"Success: Header exported to '{output_file}'.", fg=typer.colors.GREEN, bold=True)
     except (FileNotFoundError, OSError) as e:
         typer.secho(f"{e}", fg=typer.colors.RED, bold=True)
         raise typer.Exit(code=1)

@@ -43,4 +43,16 @@ clfits set my_image.fits OBJECT "NGC 4993" --comment "Corrected object name"
 clfits del my_image.fits HISTORY
 ```
 
+**Export the header to JSON:**
+
+```bash
+clfits export my_image.fits --format json
+```
+
+**Export the header to a YAML file (format is inferred from filename):**
+
+```bash
+clfits export my_image.fits --output header.yml
+```
+
 For more detailed instructions, see the [full documentation](https://clfits.readthedocs.io/). 

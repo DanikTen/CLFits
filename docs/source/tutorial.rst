@@ -47,4 +47,25 @@ The output should now be:
 
    NGC 4993
 
-That's it! You've successfully corrected the FITS header using `CLFits`. 
+That's it! You've successfully corrected the FITS header using `CLFits`.
+
+Bonus: Exporting the Header
+---------------------------
+
+Now that your header is corrected, you might want to save it to a more common format for archiving or for use in other scripts. The `export` command makes this easy.
+
+**Export to a JSON file:**
+
+You can save the header to a file, inferring the format from the filename:
+
+.. code-block:: bash
+
+   clfits export your_image.fits --output corrected_header.json
+
+**Export to YAML and print to console:**
+
+If you don't provide an output file, the result is printed to the console.
+
+.. code-block:: bash
+
+   clfits export your_image.fits --format yaml 

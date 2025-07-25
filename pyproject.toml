@@ -26,6 +26,7 @@ dependencies = [
     "astropy",
     "typer[all]",
     "rich",
+    "pyyaml",
 ]
 
 [project.urls]
