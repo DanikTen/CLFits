@@ -20,9 +20,7 @@ class Format(str, Enum):
 
 
 def to_dict(header: Header) -> Dict[str, Union[str, int, float, bool]]:
-    """
-
-    Convert a FITS header to a dictionary.
+    """Convert a FITS header to a dictionary.
 
     Parameters
     ----------
@@ -33,13 +31,13 @@ def to_dict(header: Header) -> Dict[str, Union[str, int, float, bool]]:
     -------
     Dict[str, Union[str, int, float, bool]]
         A dictionary representation of the header.
+
     """
     return {keyword: value for keyword, value in header.items()}
 
 
 def to_json(header: Header) -> str:
-    """
-    Convert a FITS header to a JSON string.
+    """Convert a FITS header to a JSON string.
 
     Parameters
     ----------
@@ -50,13 +48,13 @@ def to_json(header: Header) -> str:
     -------
     str
         A JSON string representation of the header.
+
     """
     return json.dumps(to_dict(header), indent=2)
 
 
 def to_yaml(header: Header) -> str:
-    """
-    Convert a FITS header to a YAML string.
+    """Convert a FITS header to a YAML string.
 
     Parameters
     ----------
@@ -67,13 +65,13 @@ def to_yaml(header: Header) -> str:
     -------
     str
         A YAML string representation of the header.
+
     """
     return yaml.dump(to_dict(header), indent=2)
 
 
 def to_csv(header: Header) -> str:
-    """
-    Convert a FITS header to a CSV string.
+    """Convert a FITS header to a CSV string.
 
     Parameters
     ----------
@@ -84,6 +82,7 @@ def to_csv(header: Header) -> str:
     -------
     str
         A CSV string representation of the header.
+
     """
     output = StringIO()
     writer = csv.writer(output)
@@ -94,8 +93,7 @@ def to_csv(header: Header) -> str:
 
 
 def export_header(header: Header, format: Format, output_file: Path = None) -> None:
-    """
-    Export a FITS header to a specified format and destination.
+    """Export a FITS header to a specified format and destination.
 
     Parameters
     ----------
@@ -106,6 +104,7 @@ def export_header(header: Header, format: Format, output_file: Path = None) -> N
     output_file : Path, optional
         The file to save the output to. If None, the output is printed
         to the console, by default None.
+
     """
     exporters = {
         Format.JSON: to_json,
@@ -117,4 +116,4 @@ def export_header(header: Header, format: Format, output_file: Path = None) -> N
     if output_file:
         output_file.write_text(content)
     else:
-        print(content) 
+        print(content)

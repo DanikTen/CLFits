@@ -3,13 +3,12 @@
 import csv
 import json
 from pathlib import Path
-from typing import Dict, Union
 
 import pytest
 import yaml
 from typer.testing import CliRunner
 
-from clfits.export import Format, to_csv, to_dict, to_json, to_yaml
+from clfits.export import to_csv, to_dict, to_json, to_yaml
 from clfits.main import app
 from tests.utils import create_test_fits
 
@@ -103,4 +102,4 @@ def test_export_infer_format_error(tmp_path: Path):
     output_file = tmp_path / "header.txt"
     result = runner.invoke(app, ["export", str(fits_file), "--output", str(output_file)], catch_exceptions=False)
     assert result.exit_code == 1
-    assert "Error: Could not infer format" in result.stdout 
+    assert "Error: Could not infer format" in result.stdout
