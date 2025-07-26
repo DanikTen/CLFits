@@ -5,7 +5,6 @@ This file lists ideas and enhancements that are out of scope for the initial v1 
 ## Potential Features for v2+
 
 - **FITS Data Manipulation:**
-  - Edit, extract, or replace FITS data arrays (images, tables, etc.).
   - Support for batch processing of multiple files.
 - **Interactive Mode:**
   - Launch an interactive shell for advanced header/data editing.
